@@ -182,6 +182,12 @@ def stream_logs(
         console.error(
             "Run in with [bold]--loglevel debug[/bold] to see the full error."
         )
+        # TODO Please let me see the logs!
+        sys.stdout.flush()
+        sys.stderr.flush()
+        import time
+
+        time.sleep(5)
         os._exit(1)
 
 
