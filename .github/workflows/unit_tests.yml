@@ -33,7 +33,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
           run-poetry-install: true
           create-venv-at-path: .venv
-    - run: |
+    - name: Run unit tests
+      run: |
         export PYTHONUNBUFFERED=1
         poetry run pytest tests --cov --no-cov-on-fail --cov-report=
     - run: poetry run coverage html

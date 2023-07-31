@@ -55,7 +55,7 @@ jobs:
       - name: Init Website for counter example
         working-directory: ./reflex-examples/counter
         run: |
-          poetry run reflex init
+          poetry run reflex init --loglevel debug
       - name: Run Website and Check for errors
         run: |
           poetry run bash scripts/integration.sh ./reflex-examples/counter dev
