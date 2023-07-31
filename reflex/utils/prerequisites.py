@@ -167,7 +167,7 @@ def get_default_app_name() -> str:
         console.error(
             f"The app directory cannot be named [bold]{constants.MODULE_NAME}[/bold]."
         )
-        raise typer.Exit()
+        raise typer.Exit(1)
 
     return app_name
 
@@ -315,7 +315,7 @@ def install_node():
         console.error(
             f"Node.js version {constants.NODE_VERSION} or higher is required to run Reflex."
         )
-        raise typer.Exit()
+        raise typer.Exit(1)
 
     # Create the nvm directory and install.
     path_ops.mkdir(constants.NVM_DIR)
@@ -401,14 +401,14 @@ def check_initialized(frontend: bool = True):
         console.error(
             f"The app is not initialized. Run [bold]{constants.MODULE_NAME} init[/bold] first."
         )
-        raise typer.Exit()
+        raise typer.Exit(1)
 
     # Check that the template is up to date.
     if frontend and not is_latest_template():
         console.error(
             "The base app template has updated. Run [bold]reflex init[/bold] again."
         )
-        raise typer.Exit()
+        raise typer.Exit(1)
 
     # Print a warning for Windows users.
     if IS_WINDOWS:
