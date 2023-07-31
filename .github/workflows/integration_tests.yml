@@ -58,6 +58,8 @@ jobs:
           poetry run reflex init --loglevel debug
       - name: Run Website and Check for errors
         run: |
+          # TODO is npm home?
+          npm -v
           poetry run bash scripts/integration.sh ./reflex-examples/counter dev
 
   reflex-web:
@@ -97,4 +99,6 @@ jobs:
         run: poetry run reflex init
       - name: Run Website and Check for errors
         run: |
+          # TODO is npm home?
+          npm -v
           poetry run bash scripts/integration.sh ./reflex-web prod
