@@ -9,10 +9,6 @@ export PYTHONUNBUFFERED=1
 
 # Start the server in the background
 reflex run --env "$2" & pid=$!
-if [ "$?" -ne 0 ]; then
-    echo "Failed to start reflex server"
-    exit 1
-fi
 
 # TODO does this even work on windows? Not clear, possibly not impactful though.
 trap "kill -INT $pid ||:" EXIT
@@ -20,4 +16,4 @@ echo "Started server with PID $pid"
 
 # Assume we run from the root of the repo
 popd
-python scripts/wait_for_listening_port.py 3000 8000 --timeout=600
+python scripts/wait_for_listening_port.py 3000 8000 --timeout=600 --server-pid "$pid"

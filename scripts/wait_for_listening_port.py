@@ -4,15 +4,28 @@ Replaces logic previously implemented in a shell script that needed
 tools that are not available on Windows.
 """
 import argparse
+import os
 import socket
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
-def _wait_for_port(port, timeout):
+def _check_pid(pid):
+    try:
+        os.kill(pid, 0)
+    except OSError:
+        return False
+    else:
+        return True
+
+
+def _wait_for_port(port, server_pid, timeout):
     start = time.time()
     print(f"Waiting for up to {timeout} seconds for port {port} to start listening.")
     while True:
+        if server_pid and not _check_pid(server_pid):
+            print(f"FAIL: Server process {server_pid} is not running.")
+            return False
         try:
             socket.create_connection(("localhost", port), timeout=0.5)
             print(f"OK! Port {port} is listening after {time.time() - start} seconds")
@@ -29,11 +42,14 @@ def main():
     parser = argparse.ArgumentParser(description="Wait for ports to start listening.")
     parser.add_argument("port", type=int, nargs="+")
     parser.add_argument("--timeout", type=int, required=True)
+    parser.add_argument("--server-pid", type=int)
     args = parser.parse_args()
     executor = ThreadPoolExecutor(max_workers=len(args.port))
     futures = []
     for p in args.port:
-        futures.append(executor.submit(_wait_for_port, p, args.timeout))
+        futures.append(
+            executor.submit(_wait_for_port, p, args.server_pid, args.timeout)
+        )
     for f in as_completed(futures):
         if not f.result():
             print("At least one port failed... exiting with failure.")
