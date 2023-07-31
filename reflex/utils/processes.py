@@ -175,7 +175,10 @@ def stream_logs(
             yield line
 
     if process.returncode != 0:
-        console.error(f"Error during {message}")
+        console.error(
+            f"Error during {message} (subprocess exit code ${process.returncode})"
+        )
+        console.error("Da REST: " + str(process.stdout.read()))
         console.error(
             "Run in with [bold]--loglevel debug[/bold] to see the full error."
         )
