@@ -8,7 +8,7 @@ echo "Changed directory to $1"
 export PYTHONUNBUFFERED=1
 
 # Start the server in the background
-reflex run --env "$2" & pid=$!
+reflex run --loglevel debug --env "$2" & pid=$!
 
 # TODO does this even work on windows? Not clear, possibly not impactful though.
 trap "kill -INT $pid ||:" EXIT
